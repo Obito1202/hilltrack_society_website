@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": "9a6289f8-1813-40ea-8893-dfeec4416edb",
+    "created_at": "2026-06-21T15:15:50.797Z",
+    "name": "GGIC Nainital",
+    "location": "Nainital",
+    "visit_date": "2222-03-12",
+    "image_url": "uploads/08cc1cdf594db31f.png"
+  }
+]
