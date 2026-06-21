@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hilltrack Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#F9F6F0; --surface:#F2EFEB; --ink:#1C3325; --soft:#4A564F; --accent:#C86A41; --line:#E3DED8; --err:#B83A3A; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Outfit',system-ui,sans-serif}
+  header{border-bottom:1px solid var(--line);padding:18px 28px;display:flex;align-items:center;justify-content:space-between}
+  header h1{font-family:'Cormorant Garamond',serif;font-size:24px;margin:0}
+  main{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 65px)}
+  nav{border-right:1px solid var(--line);padding:18px 12px}
+  nav button{display:block;width:100%;text-align:left;background:none;border:none;color:var(--ink);font:inherit;padding:12px 14px;cursor:pointer;font-size:14px}
+  nav button.active{background:var(--ink);color:var(--bg)}
+  section{padding:32px}
+  h2{font-family:'Cormorant Garamond',serif;font-size:32px;margin:0 0 24px}
+  .row{display:flex;justify-content:space-between;align-items:center;padding:14px;border:1px solid var(--line);margin-bottom:8px;background:#fff}
+  .row .meta{font-size:12px;color:var(--soft);margin-top:4px}
+  .row .title{font-family:'Cormorant Garamond',serif;font-size:18px}
+  .btn{padding:10px 18px;border:none;background:var(--accent);color:var(--bg);cursor:pointer;font:inherit;font-size:13px;display:inline-flex;gap:6px;align-items:center}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+  .btn.danger{background:transparent;color:var(--err);border:1px solid var(--err)}
+  .form{background:var(--surface);padding:24px;border:1px solid var(--line);margin-bottom:24px}
+  .form .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .form label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);font-weight:600}
+  .form input,.form textarea{width:100%;padding:8px 10px;font:inherit;font-size:14px;background:#fff;border:1px solid var(--line);color:var(--ink);margin-top:6px;border-radius:0}
+  .form textarea{min-height:80px}
+  .full{grid-column:1/-1}
+  .imgwrap{display:flex;gap:10px;align-items:center;margin-top:8px}
+  .imgwrap img{height:60px;width:60px;object-fit:cover;border:1px solid var(--line)}
+  .toast{position:fixed;top:16px;right:16px;background:var(--ink);color:var(--bg);padding:10px 16px;font-size:13px;opacity:0;transition:opacity .3s}
+  .toast.show{opacity:1}
+  .actions{display:flex;gap:8px}
+  .note{font-size:12px;color:var(--soft);margin-top:6px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Hilltrack Admin</h1>
+  <div style="font-size:12px;color:var(--soft)">Local-only · edits write to <code>public/data/*.json</code></div>
+</header>
+<main>
+  <nav id="nav"></nav>
+  <section id="content"></section>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const TABS = [
+  { k:"members",      label:"Members",      fields:[["name","Name"],["role","Role"],["email","Email"],["description","Description","textarea"],["order","Order","number"],["image_url","Photo","image"]] },
+  { k:"events",       label:"Events",       fields:[["title","Title"],["date","Date","date"],["location","Location"],["description","Description","textarea"],["image_url","Image","image"]] },
+  { k:"achievements", label:"Achievements", fields:[["title","Title"],["year","Year"],["description","Description","textarea"],["image_url","Image","image"]] },
+  { k:"schools",      label:"Schools",      fields:[["name","School name"],["location","Location"],["visit_date","Visit date","date"],["description","Description","textarea"],["image_url","Image","image"]] },
+  { k:"gallery",      label:"Gallery",      fields:[["caption","Caption"],["image_url","Image","image"]] },
+  { k:"settings",     label:"Site Settings" },
+];
+let current = "members", editing = null, form = {};
+
+const $ = (s) => document.querySelector(s);
+const toast = (m) => { const t=$('#toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); };
+const api = (m,u,b) => fetch(u,{method:m,headers:b?{'Content-Type':'application/json'}:{},body:b?JSON.stringify(b):undefined}).then(r=>r.json());
+
+function renderNav() {
+  $('#nav').innerHTML = TABS.map(t => `<button class="${t.k===current?'active':''}" data-tab="${t.k}">${t.label}</button>`).join('');
+  $('#nav').querySelectorAll('button').forEach(b => b.onclick = () => { current=b.dataset.tab; editing=null; form={}; render(); });
+}
+
+async function render() {
+  renderNav();
+  if (current === "settings") return renderSettings();
+  const tab = TABS.find(t => t.k===current);
+  const items = await api('GET',`/api/${current}`);
+  const formHtml = editing ? renderForm(tab) : '';
+  $('#content').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2>Manage ${tab.label}</h2>
+      ${editing ? '' : `<button class="btn" id="add">+ Add new</button>`}
+    </div>
+    ${formHtml}
+    <div>${items.map(it => `
+      <div class="row">
+        <div>
+          <div class="title">${it.name||it.title||it.caption||'(untitled)'}</div>
+          <div class="meta">${[it.role,it.year,it.location,it.date,it.visit_date].filter(Boolean).join(' · ')}</div>
+        </div>
+        <div class="actions">
+          ${current!=="gallery" ? `<button class="btn ghost" data-edit="${it.id}">Edit</button>` : ''}
+          <button class="btn danger" data-del="${it.id}">Delete</button>
+        </div>
+      </div>`).join('') || '<p style="color:var(--soft);font-size:14px">Nothing here yet.</p>'}
+    </div>`;
+  if ($('#add')) $('#add').onclick = () => { editing = 'new'; form = {}; render(); };
+  document.querySelectorAll('[data-edit]').forEach(b => b.onclick = async () => {
+    const it = (await api('GET',`/api/${current}`)).find(x=>x.id===b.dataset.edit);
+    editing = it.id; form = {...it}; render();
+  });
+  document.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+    if (!confirm("Delete this item?")) return;
+    await api('DELETE',`/api/${current}/${b.dataset.del}`); toast("Deleted"); render();
+  });
+  bindForm();
+}
+
+function renderForm(tab) {
+  return `<div class="form"><div class="grid">${tab.fields.map(([key,label,type]) => {
+    if (type==="image") return `
+      <div class="full">
+        <label>${label}</label>
+        <div class="imgwrap">
+          ${form[key] ? `<img src="/${form[key]}" alt="">` : ''}
+          <input type="file" accept="image/*" data-imgkey="${key}">
+          ${form[key] ? `<button class="btn ghost" data-clear="${key}" type="button">Remove</button>` : ''}
+        </div>
+      </div>`;
+    if (type==="textarea") return `<div class="full"><label>${label}</label><textarea data-key="${key}">${form[key]||''}</textarea></div>`;
+    return `<div><label>${label}</label><input type="${type||'text'}" data-key="${key}" value="${form[key]??''}"></div>`;
+  }).join('')}</div>
+  <div style="margin-top:16px;display:flex;gap:8px"><button class="btn" id="save">Save</button><button class="btn ghost" id="cancel">Cancel</button></div></div>`;
+}
+
+function bindForm() {
+  document.querySelectorAll('[data-key]').forEach(el => el.oninput = () => { form[el.dataset.key] = el.type==='number' ? Number(el.value) : el.value; });
+  document.querySelectorAll('[data-clear]').forEach(b => b.onclick = () => { form[b.dataset.clear] = ''; render(); });
+  document.querySelectorAll('[data-imgkey]').forEach(inp => inp.onchange = async () => {
+    const fd = new FormData(); fd.append('file', inp.files[0]);
+    const r = await fetch('/api/upload',{method:'POST',body:fd}).then(r=>r.json());
+    form[inp.dataset.imgkey] = r.url; toast("Image uploaded"); render();
+  });
+  if ($('#save')) $('#save').onclick = async () => {
+    if (editing==='new') await api('POST',`/api/${current}`, form);
+    else await api('PUT',`/api/${current}/${editing}`, form);
+    toast("Saved"); editing=null; form={}; render();
+  };
+  if ($('#cancel')) $('#cancel').onclick = () => { editing=null; form={}; render(); };
+}
+
+async function renderSettings() {
+  const s = await api('GET','/api/settings');
+  $('#content').innerHTML = `<h2>Site Settings</h2>
+    <div class="form" style="max-width:780px">
+      <div class="grid">
+        <div class="full"><label>About text</label><textarea id="about" rows="5">${s.about||''}</textarea></div>
+        <div class="full"><label>Aims (one per line)</label><textarea id="aims" rows="10">${(s.aims||[]).join('\n')}</textarea></div>
+        <div><label>Contact Email</label><input id="contact_email" value="${s.contact_email||''}"></div>
+        <div><label>Contact Phone</label><input id="contact_phone" value="${s.contact_phone||''}"></div>
+        <div class="full"><label>Address</label><textarea id="contact_address" rows="2">${s.contact_address||''}</textarea></div>
+        <div class="full"><label>Bank Details (Donate page)</label><textarea id="bank_details" rows="5">${s.bank_details||''}</textarea></div>
+        <div><label>UPI ID</label><input id="upi_id" value="${s.upi_id||''}"></div>
+      </div>
+      <div style="margin-top:16px"><button class="btn" id="ssave">Save settings</button></div>
+      <p class="note">After saving, commit the changes in <code>public/data/settings.json</code> and push to GitHub to publish.</p>
+    </div>`;
+  $('#ssave').onclick = async () => {
+    const body = {
+      about: $('#about').value,
+      aims: $('#aims').value.split('\n').map(l=>l.trim()).filter(Boolean),
+      contact_email: $('#contact_email').value,
+      contact_phone: $('#contact_phone').value,
+      contact_address: $('#contact_address').value,
+      bank_details: $('#bank_details').value,
+      upi_id: $('#upi_id').value,
+    };
+    await api('PUT','/api/settings', body);
+    toast("Settings saved");
+  };
+}
+
+render();
+</script>
+</body>
+</html>

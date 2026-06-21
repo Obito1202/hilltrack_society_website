@@ -1,0 +1,23 @@
+import { useEffect, useState } from "react";
+import { loadData, assetUrl } from "../lib/data";
+import { Container, SectionHeading } from "../components/PublicLayout.jsx";
+
+export default function Gallery() {
+  const [items, setItems] = useState([]);
+  useEffect(() => { loadData("gallery").then(setItems); }, []);
+  return (
+    <Container className="py-24 lg:py-32">
+      <SectionHeading overline="Gallery" title="Frames from the field." />
+      {items.length === 0 ? <p className="mt-16 text-lg" style={{ color: "var(--ink-soft)" }}>The gallery is empty — photos coming soon.</p> : (
+        <div className="mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          {items.map(g => (
+            <figure key={g.id} className="group">
+              <div className="aspect-square overflow-hidden"><img src={assetUrl(g.image_url)} alt={g.caption||"Gallery"} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" /></div>
+              {g.caption && <figcaption className="mt-2 text-xs" style={{ color: "var(--ink-soft)" }}>{g.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      )}
+    </Container>
+  );
+}
