@@ -1,1 +1,92 @@
-[{"id":"8eae42d6-1b1d-4ed7-afcd-9b0fc96f8a71","name":"Lt. Col. Roshan Lal","role":"President","email":"roxy.kohli74@gmail.com","description":"","image_url":"/api/uploads/3727059b504d4c45b7a98d019d3c8173.png","order":1,"created_at":"2026-06-21T13:26:25.148468+00:00"},{"id":"128be1b5-8aa3-49fd-8b78-d6bb24e11f81","name":"Shri R. C. Kandpal","role":"Vice President","email":"rameshkandpal1963@gmail.com","description":"Retd. Deputy Registrar, High Court Uttarakhand","image_url":"","order":2,"created_at":"2026-06-21T13:26:25.159936+00:00"},{"id":"c921fb4e-42e0-4acf-b86b-8af064681777","name":"Vaibhav Joshi","role":"Secretary","email":"vaibhavjoshi1202@gmail.com","description":"Software Engineer, Deutsche Bank","image_url":"","order":3,"created_at":"2026-06-21T13:26:25.161356+00:00"},{"id":"e154590b-04c2-4e4a-8e22-cf60e51620d7","name":"Kumari Adwika","role":"Joint Secretary","email":"adwika553@gmail.com","description":"Student","image_url":"","order":4,"created_at":"2026-06-21T13:26:25.163022+00:00"},{"id":"c2abab9b-94e5-4c33-bfe5-55adc9358cb9","name":"Kushagra Joshi","role":"Treasurer","email":"k.joshi@iitg.ac.in","description":"B.Tech 3rd Year, IIT Guwahati","image_url":"","order":5,"created_at":"2026-06-21T13:26:25.163579+00:00"},{"id":"856b7a8f-1249-471a-af55-c1276c799464","name":"Alok Chandra Joshi","role":"Executive Member","email":"alokjoshi17@gmail.com","description":"Principal, GBUPS Mallital","image_url":"","order":6,"created_at":"2026-06-21T13:26:25.164336+00:00"},{"id":"ca0968df-83e8-4f89-b577-4cd3dcec55a8","name":"Dr. Suman Karanpal Rawat","role":"Executive Member","email":"jsuman26@gmail.com","description":"Associate Professor, Amity University","image_url":"","order":7,"created_at":"2026-06-21T13:26:25.164871+00:00"},{"id":"787ad4d4-5c62-49b9-8640-e6bee6a1e983","name":"Ravin Rawat","role":"Executive Member","email":"ravinrawat26@gmail.com","description":"Student","image_url":"","order":8,"created_at":"2026-06-21T13:26:25.165335+00:00"},{"id":"c15b4949-904d-4359-83a2-cd25ae83d112","name":"Lokesh Kumar","role":"Executive Member","email":"lalitlokesh87@gmail.com","description":"Agency Manager, SBI Life, Nainital","image_url":"","order":9,"created_at":"2026-06-21T13:26:25.165840+00:00"}]
+[
+  {
+    "id": "8eae42d6-1b1d-4ed7-afcd-9b0fc96f8a71",
+    "name": "Lt. Col. Roshan Lal",
+    "role": "President",
+    "email": "",
+    "description": "",
+    "image_url": "/api/uploads/3727059b504d4c45b7a98d019d3c8173.png",
+    "order": 1,
+    "created_at": "2026-06-21T13:26:25.148468+00:00"
+  },
+  {
+    "id": "128be1b5-8aa3-49fd-8b78-d6bb24e11f81",
+    "name": "Shri R. C. Kandpal",
+    "role": "Vice President",
+    "email": "",
+    "description": "Retd. Deputy Registrar, High Court Uttarakhand",
+    "image_url": "",
+    "order": 2,
+    "created_at": "2026-06-21T13:26:25.159936+00:00"
+  },
+  {
+    "id": "c921fb4e-42e0-4acf-b86b-8af064681777",
+    "name": "Vaibhav Joshi",
+    "role": "Secretary",
+    "email": "",
+    "description": "Software Engineer, Deutsche Bank",
+    "image_url": "",
+    "order": 3,
+    "created_at": "2026-06-21T13:26:25.161356+00:00"
+  },
+  {
+    "id": "e154590b-04c2-4e4a-8e22-cf60e51620d7",
+    "name": "Kumari Adwika",
+    "role": "Joint Secretary",
+    "email": "",
+    "description": "Student",
+    "image_url": "",
+    "order": 4,
+    "created_at": "2026-06-21T13:26:25.163022+00:00"
+  },
+  {
+    "id": "c2abab9b-94e5-4c33-bfe5-55adc9358cb9",
+    "name": "Kushagra Joshi",
+    "role": "Treasurer",
+    "email": "",
+    "description": "B.Tech 3rd Year, IIT Guwahati",
+    "image_url": "",
+    "order": 5,
+    "created_at": "2026-06-21T13:26:25.163579+00:00"
+  },
+  {
+    "id": "856b7a8f-1249-471a-af55-c1276c799464",
+    "name": "Alok Chandra Joshi",
+    "role": "Executive Member",
+    "email": "",
+    "description": "Principal, GBUPS Mallital",
+    "image_url": "",
+    "order": 6,
+    "created_at": "2026-06-21T13:26:25.164336+00:00"
+  },
+  {
+    "id": "ca0968df-83e8-4f89-b577-4cd3dcec55a8",
+    "name": "Dr. Suman Karanpal Rawat",
+    "role": "Executive Member",
+    "email": "",
+    "description": "Associate Professor, Amity University",
+    "image_url": "",
+    "order": 7,
+    "created_at": "2026-06-21T13:26:25.164871+00:00"
+  },
+  {
+    "id": "787ad4d4-5c62-49b9-8640-e6bee6a1e983",
+    "name": "Ravin Rawat",
+    "role": "Executive Member",
+    "email": "",
+    "description": "Student",
+    "image_url": "",
+    "order": 8,
+    "created_at": "2026-06-21T13:26:25.165335+00:00"
+  },
+  {
+    "id": "c15b4949-904d-4359-83a2-cd25ae83d112",
+    "name": "Lokesh Kumar",
+    "role": "Executive Member",
+    "email": "",
+    "description": "Agency Manager, SBI Life, Nainital",
+    "image_url": "",
+    "order": 9,
+    "created_at": "2026-06-21T13:26:25.165840+00:00"
+  }
+]
