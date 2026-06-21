@@ -21,17 +21,43 @@
   "bank_details": "",
   "upi_id": "",
   "homepage_stats": [
-    { "value": "250+", "label": "Students Mentored" },
-    { "value": "15+",  "label": "Schools Connected" },
-    { "value": "50+",  "label": "Career Guidance Sessions" },
-    { "value": "100+", "label": "Hours of Volunteer Service" },
-    { "value": "20+",  "label": "Mentors & Industry Experts" },
-    { "value": "3",    "label": "Districts Reached" }
+    {
+      "value": "250+",
+      "label": "Students Mentored"
+    },
+    {
+      "value": "15+",
+      "label": "Schools Connected"
+    },
+    {
+      "value": "50+",
+      "label": "Career Guidance Sessions"
+    },
+    {
+      "value": "100+",
+      "label": "Hours of Volunteer Service"
+    },
+    {
+      "value": "20+",
+      "label": "Mentors & Industry Experts"
+    },
+    {
+      "value": "3",
+      "label": "Districts Reached"
+    }
   ],
   "donation_tiers": [
-    { "amount": "₹500",    "description": "Stationery kit for one student" },
-    { "amount": "₹2,500",  "description": "A small library in a village school" },
-    { "amount": "₹15,000", "description": "One solar street light installed" },
-    { "amount": "₹50,000", "description": "Biogas pilot for a hamlet" }
+    {
+      "amount": "₹500",
+      "description": "Stationery kit for one student"
+    },
+    {
+      "amount": "₹2,500",
+      "description": "A small library in a village school"
+    },
+    {
+      "amount": "₹50,000",
+      "description": "Biogas pilot for a hamlet"
+    }
   ]
 }
