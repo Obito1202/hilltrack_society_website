@@ -2,12 +2,25 @@ import { useEffect } from "react";
 
 export function useReveal() {
   useEffect(() => {
-    const els = document.querySelectorAll(".reveal");
     const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in"); });
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in");
+          io.unobserve(e.target);
+        }
+      });
     }, { threshold: 0.12 });
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+
+    const observeAll = () => {
+      document.querySelectorAll(".reveal:not(.in)").forEach((el) => io.observe(el));
+    };
+    observeAll();
+
+    // Re-observe whenever new .reveal nodes are inserted (async data loads)
+    const mo = new MutationObserver(() => observeAll());
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => { io.disconnect(); mo.disconnect(); };
   }, []);
 }
 
