@@ -1,0 +1,77 @@
+{
+  "project_name": "Hilltrack Society for Education, Environment and Energy",
+  "design_philosophy": {
+    "theme": "Light",
+    "archetype": "1 - Organic & Earthy",
+    "vibe": "Editorial, narrative-driven, grounded, trustworthy, natural aesthetics.",
+    "anti_patterns": [
+      "SaaS card grids",
+      "Center-everything layouts",
+      "Purple/teal gradients",
+      "Generic stock photography",
+      "Heavy glassmorphism"
+    ]
+  },
+  "colors": {
+    "background": "#F9F6F0",
+    "surface": "#F2EFEB",
+    "surface_hover": "#E8E4DD",
+    "text_primary": "#1C3325",
+    "text_secondary": "#4A564F",
+    "accent": "#C86A41",
+    "accent_hover": "#A65431",
+    "border": "#E3DED8",
+    "success": "#2A5C3D",
+    "warning": "#D4A017",
+    "error": "#B83A3A"
+  },
+  "typography": {
+    "heading_font": "Cormorant Garamond",
+    "body_font": "Outfit",
+    "rules": {
+      "h1": "text-5xl sm:text-6xl font-serif tracking-tighter text-[#1C3325] leading-none",
+      "h2": "text-4xl sm:text-5xl font-serif tracking-tight text-[#1C3325]",
+      "h3": "text-2xl sm:text-3xl font-serif text-[#1C3325]",
+      "h4": "text-xl font-serif text-[#1C3325]",
+      "body": "text-base lg:text-lg font-sans text-[#4A564F] leading-relaxed",
+      "overline": "uppercase text-xs tracking-[0.2em] font-sans font-semibold text-[#C86A41]"
+    }
+  },
+  "layout_spacing": {
+    "container": "max-w-7xl mx-auto px-6 lg:px-12",
+    "section_padding": "py-20 lg:py-32",
+    "grid_pattern": "Bento-style asymmetric for events/achievements. Grid cols-1 md:cols-12 with generous gap-8 to gap-12.",
+    "border_radius": "rounded-sm"
+  },
+  "surface_strategies": {
+    "marketing": "Solid flat backgrounds with subtle 1px border (#E3DED8), no drop shadows to maintain editorial flat feel. Large bleeding images.",
+    "admin_dashboard": "Clean, flat cards. No glassmorphism. Strict grid layout, highly functional."
+  },
+  "media_urls": {
+    "hero_background": "https://images.unsplash.com/photo-1688991057964-75b1e35211ae?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHwzfHxuYWluaXRhbCUyMG1vdW50YWlucyUyMGxhbmRzY2FwZXxlbnwwfHx8fDE3ODIwNDgyMjV8MA&ixlib=rb-4.1.0&q=85",
+    "education_impact": "https://images.pexels.com/photos/15119089/pexels-photo-15119089.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    "energy_environment": "https://images.unsplash.com/photo-1749192901190-ea45a711b0e3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwxfHxzb2xhciUyMHBhbmVscyUyMHJ1cmFsJTIwbmF0dXJlfGVufDB8fHx8MTc4MjA0ODIyNXww&ixlib=rb-4.1.0&q=85",
+    "mountain_landscape_2": "https://images.unsplash.com/photo-1673766510259-2c39f6e1a136?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHwyfHxuYWluaXRhbCUyMG1vdW50YWlucyUyMGxhbmRzY2FwZXxlbnwwfHx8fDE3ODIwNDgyMjV8MA&ixlib=rb-4.1.0&q=85",
+    "children_group": "https://images.pexels.com/photos/35558791/pexels-photo-35558791.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  "component_instructions": {
+    "header": "Solid or Crystal Glass depending on background. If solid: bg-[#F9F6F0]. Navigation links MUST be visible on desktop.",
+    "buttons": "Flat design. Primary: bg-[#C86A41] text-[#F9F6F0] hover:bg-[#A65431]. Secondary: bg-transparent border border-[#1C3325] text-[#1C3325] hover:bg-[#1C3325] hover:text-[#F9F6F0].",
+    "testing": "All interactive elements MUST include data-testid attributes (e.g., data-testid='donate-button').",
+    "icons": "lucide-react for UI, but rely more on high-quality typography and photography than icons."
+  },
+  "animations": {
+    "scroll": "Use Lenis for smooth scrolling.",
+    "interactions": "Subtle translate-y lift on cards, fade-in for images, slow organic marquee for partners or key stats.",
+    "accessibility": "Respect prefers-reduced-motion for all dynamic effects."
+  },
+  "instructions_to_main_agent": [
+    "Do not use generic Shadcn components for the public marketing site. Use custom HTML/Tailwind for an editorial layout.",
+    "For the Admin CMS, use Shadcn but stripped of 'Vercel-look'. Customize to match the earthy brand (flat surfaces, dark green active states, bone backgrounds).",
+    "Use generous padding (p-12 to p-24) to create breathing room. Never cramp text.",
+    "For hero overlay, do not exceed bg-black/40. Let the mountain imagery breathe.",
+    "Ensure data-testid is present on all forms, links, and buttons as per standard testing protocols.",
+    "Admin Login should use JWT authentication.",
+    "All backend APIs and integrations should be fully built; if logic is absent, MOCK it explicitly and highlight it."
+  ]
+}
