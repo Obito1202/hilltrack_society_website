@@ -1,55 +1,51 @@
-import { useEffect } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
-import { HOME } from "@/constants/testIds";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { Toaster } from "@/components/ui/sonner";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+import PublicLayout from "@/components/site/PublicLayout";
+import Home from "@/pages/Home";
+import About from "@/pages/About";
+import Members from "@/pages/Members";
+import Events from "@/pages/Events";
+import Achievements from "@/pages/Achievements";
+import Schools from "@/pages/Schools";
+import Gallery from "@/pages/Gallery";
+import Contact from "@/pages/Contact";
+import Donate from "@/pages/Donate";
+import Login from "@/pages/Login";
+import AdminDashboard from "@/pages/admin/Dashboard";
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
-
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
-
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          data-testid={HOME.emergentLink}
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+function Protected({ children }) {
+  const { user } = useAuth();
+  if (user === null) return <div className="p-10">Loading...</div>;
+  if (!user) return <Navigate to="/admin/login" replace />;
+  return children;
+}
 
 function App() {
   return (
-    <div className="App">
+    <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />}>
+          <Route element={<PublicLayout />}>
             <Route index element={<Home />} />
+            <Route path="about" element={<About />} />
+            <Route path="members" element={<Members />} />
+            <Route path="events" element={<Events />} />
+            <Route path="achievements" element={<Achievements />} />
+            <Route path="schools" element={<Schools />} />
+            <Route path="gallery" element={<Gallery />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="donate" element={<Donate />} />
           </Route>
+          <Route path="/admin/login" element={<Login />} />
+          <Route path="/admin" element={<Protected><AdminDashboard /></Protected>} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
-    </div>
+      <Toaster position="top-right" richColors />
+    </AuthProvider>
   );
 }
 

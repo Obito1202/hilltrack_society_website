@@ -1,0 +1,22 @@
+{
+  "summary": "Smoke-tested Hilltrack NGO backend + frontend. Public pages render with seeded data, admin login/CRUD works, protected endpoints return 401, created event appears on /events, logout clears token and protects /admin.",
+  "tested_scope": ["backend", "frontend", "auth", "integration"],
+  "passed": [
+    "GET /api/members returns 9 seeded governing body members in correct order (Roshan Lal President, R.C. Kandpal VP, Vaibhav Joshi Secretary, etc.)",
+    "POST /api/auth/login with admin/hilltrack2026 returns JWT token; wrong password returns 401",
+    "POST /api/members, PUT /api/settings, POST /api/upload return 401 without Authorization header",
+    "POST /api/events with Bearer token creates event successfully",
+    "GET /api/settings returns 200 with default about/aims/contact/email data",
+    "Public /members page renders 9 member-card-* tiles with zero edit/delete/add controls visible",
+    "Wrong admin credentials shows toast error and stays on /admin/login",
+    "Correct credentials redirect to /admin dashboard; all 6 tabs present (members, events, achievements, schools, gallery, settings)",
+    "Adding a new event via Events tab (add-new-btn -> form -> save-btn) creates event and it appears on public /events page",
+    "Logout button redirects to /admin/login and clears token; subsequent direct /admin access redirects back to /admin/login"
+  ],
+  "failed": [],
+  "action_items": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "retest_needed": false,
+  "full_testing_deferred": true,
+  "test_credentials": "Loaded from /app/memory/test_credentials.md (admin / hilltrack2026)"
+}
