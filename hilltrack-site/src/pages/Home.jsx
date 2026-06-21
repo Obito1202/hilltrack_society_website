@@ -6,10 +6,9 @@ import { Container, SectionHeading } from "../components/PublicLayout.jsx";
 const HERO = "https://images.unsplash.com/photo-1688991057964-75b1e35211ae?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHwzfHxuYWluaXRhbCUyMG1vdW50YWlucyUyMGxhbmRzY2FwZXxlbnwwfHx8fDE3ODIwNDgyMjV8MA&ixlib=rb-4.1.0&q=85";
 
 export default function Home() {
-  const [stats, setStats] = useState({ schools: 0, events: 0, members: 0 });
+  const [stats, setStats] = useState([]);
   useEffect(() => {
-    Promise.all([loadData("events"), loadData("schools"), loadData("members")])
-      .then(([e, s, m]) => setStats({ events: e.length, schools: s.length, members: m.length }));
+    loadData("settings").then((s) => setStats(s?.homepage_stats || []));
   }, []);
   return (
     <div>
@@ -32,10 +31,15 @@ export default function Home() {
         </Container>
       </section>
       <section className="border-b" style={{ borderColor: "var(--line)" }}>
-        <Container className="py-10 grid grid-cols-3 gap-6 text-center">
-          {[{k:stats.schools,l:"Schools reached"},{k:stats.events,l:"Events organised"},{k:stats.members+"+",l:"Governing members"}].map((s,i)=>(
-            <div key={i}><div className="font-serif-display text-5xl sm:text-6xl">{s.k}</div><div className="overline mt-2">{s.l}</div></div>
-          ))}
+        <Container className="py-14">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10 text-center">
+            {stats.map((s, i) => (
+              <div key={i}>
+                <div className="font-serif-display text-5xl sm:text-6xl leading-none">{s.value}</div>
+                <div className="overline mt-3">{s.label}</div>
+              </div>
+            ))}
+          </div>
         </Container>
       </section>
       <section>

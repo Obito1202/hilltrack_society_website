@@ -20,6 +20,8 @@ const SETTINGS_DEFAULTS = {
   aims: [],
   contact_phone: "", contact_email: "", contact_address: "",
   bank_details: "", upi_id: "",
+  homepage_stats: [],
+  donation_tiers: [],
 };
 
 async function readJSON(name, fallback) {

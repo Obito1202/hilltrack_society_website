@@ -1,1 +1,37 @@
-{"about":"Hilltrack Society for Education, Environment and Energy is a registered NGO headquartered in Nainital, Uttarakhand. We work at the intersection of rural education, environmental sustainability, and renewable energy — empowering communities across the Himalayan foothills.","aims":["Provide educational assistance, books, notebooks, stationery, and study materials to students.","Organize educational, motivational, and personality development programs.","Provide scholarships to deserving and economically weaker students.","Organize career counseling, competitive examination guidance, and skill development programs.","Establish libraries, reading rooms, and study centers.","Conduct programs on environmental protection, health awareness, and social welfare.","Promote sports, cultural, and educational activities.","Run assistance programs for students from economically weaker sections.","Promote environmental awareness and sustainable practices in schools, communities, and rural areas.","Promote and facilitate solar-powered street lighting systems in villages.","Research and develop sustainable and renewable sources of energy.","Conduct research on biofuel and biogas as alternatives to LPG.","Support projects converting agricultural residue and bio-waste into bioenergy."],"contact_phone":"","contact_email":"vaibhavjoshi1202@gmail.com","contact_address":"Joshi Niwas, Malla Krishnapur, Tallital, Nainital, Uttarakhand","bank_details":"","upi_id":""}
+{
+  "about": "Hilltrack Society for Education, Environment and Energy is a registered NGO headquartered in Nainital, Uttarakhand. We work at the intersection of rural education, environmental sustainability, and renewable energy — empowering communities across the Himalayan foothills.",
+  "aims": [
+    "Provide educational assistance, books, notebooks, stationery, and study materials to students.",
+    "Organize educational, motivational, and personality development programs.",
+    "Provide scholarships to deserving and economically weaker students.",
+    "Organize career counseling, competitive examination guidance, and skill development programs.",
+    "Establish libraries, reading rooms, and study centers.",
+    "Conduct programs on environmental protection, health awareness, and social welfare.",
+    "Promote sports, cultural, and educational activities.",
+    "Run assistance programs for students from economically weaker sections.",
+    "Promote environmental awareness and sustainable practices in schools, communities, and rural areas.",
+    "Promote and facilitate solar-powered street lighting systems in villages.",
+    "Research and develop sustainable and renewable sources of energy.",
+    "Conduct research on biofuel and biogas as alternatives to LPG.",
+    "Support projects converting agricultural residue and bio-waste into bioenergy."
+  ],
+  "contact_phone": "",
+  "contact_email": "vaibhavjoshi1202@gmail.com",
+  "contact_address": "Joshi Niwas, Malla Krishnapur, Tallital, Nainital, Uttarakhand",
+  "bank_details": "",
+  "upi_id": "",
+  "homepage_stats": [
+    { "value": "250+", "label": "Students Mentored" },
+    { "value": "15+",  "label": "Schools Connected" },
+    { "value": "50+",  "label": "Career Guidance Sessions" },
+    { "value": "100+", "label": "Hours of Volunteer Service" },
+    { "value": "20+",  "label": "Mentors & Industry Experts" },
+    { "value": "3",    "label": "Districts Reached" }
+  ],
+  "donation_tiers": [
+    { "amount": "₹500",    "description": "Stationery kit for one student" },
+    { "amount": "₹2,500",  "description": "A small library in a village school" },
+    { "amount": "₹15,000", "description": "One solar street light installed" },
+    { "amount": "₹50,000", "description": "Biogas pilot for a hamlet" }
+  ]
+}

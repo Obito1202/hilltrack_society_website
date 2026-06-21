@@ -22,10 +22,9 @@ export default function Donate() {
           <div className="p-10" style={{ background: "var(--ink)", color: "var(--bg)" }}>
             <div className="overline" style={{ color: "#E8B79A" }}>What your donation can do</div>
             <ul className="mt-6 space-y-5 font-serif-display text-2xl leading-snug">
-              <li>₹500 — Stationery kit for one student</li>
-              <li>₹2,500 — A small library in a village school</li>
-              <li>₹15,000 — One solar street light installed</li>
-              <li>₹50,000 — Biogas pilot for a hamlet</li>
+              {(s?.donation_tiers || []).map((t, i) => (
+                <li key={i}><strong style={{ fontWeight: 600 }}>{t.amount}</strong> — {t.description}</li>
+              ))}
             </ul>
           </div>
         </aside>

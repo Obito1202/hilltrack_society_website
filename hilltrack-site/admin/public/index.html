@@ -138,8 +138,15 @@ function bindForm() {
 
 async function renderSettings() {
   const s = await api('GET','/api/settings');
+  const stats = s.homepage_stats || [];
+  const tiers = s.donation_tiers || [];
+  const rowList = (list, fields, listName) => list.map((row,i) => `
+    <div class="row" style="background:#fff;display:grid;grid-template-columns:${fields.map(()=>'1fr').join(' ')} 90px;gap:8px;align-items:center;padding:8px">
+      ${fields.map(([k,ph]) => `<input data-list="${listName}" data-i="${i}" data-k="${k}" placeholder="${ph}" value="${(row[k]??'').toString().replace(/"/g,'&quot;')}">`).join('')}
+      <button class="btn danger" data-remove="${listName}" data-i="${i}" type="button">Remove</button>
+    </div>`).join('');
   $('#content').innerHTML = `<h2>Site Settings</h2>
-    <div class="form" style="max-width:780px">
+    <div class="form" style="max-width:880px">
       <div class="grid">
         <div class="full"><label>About text</label><textarea id="about" rows="5">${s.about||''}</textarea></div>
         <div class="full"><label>Aims (one per line)</label><textarea id="aims" rows="10">${(s.aims||[]).join('\n')}</textarea></div>
@@ -148,10 +155,43 @@ async function renderSettings() {
         <div class="full"><label>Address</label><textarea id="contact_address" rows="2">${s.contact_address||''}</textarea></div>
         <div class="full"><label>Bank Details (Donate page)</label><textarea id="bank_details" rows="5">${s.bank_details||''}</textarea></div>
         <div><label>UPI ID</label><input id="upi_id" value="${s.upi_id||''}"></div>
+
+        <div class="full" style="margin-top:8px">
+          <label>Homepage Stats (shown under hero) — number and label</label>
+          <div id="stats_list">${rowList(stats, [['value','e.g. 250+'],['label','e.g. Students Mentored']], 'stats')}</div>
+          <button class="btn ghost" id="add_stat" type="button" style="margin-top:8px">+ Add stat</button>
+          <p class="note">Tip: keep numbers short. 6 stats look best (2 rows of 3).</p>
+        </div>
+
+        <div class="full" style="margin-top:8px">
+          <label>Donation Tiers (shown on Donate page) — amount and what it does</label>
+          <div id="tiers_list">${rowList(tiers, [['amount','e.g. ₹500'],['description','e.g. Stationery kit for one student']], 'tiers')}</div>
+          <button class="btn ghost" id="add_tier" type="button" style="margin-top:8px">+ Add tier</button>
+        </div>
       </div>
       <div style="margin-top:16px"><button class="btn" id="ssave">Save settings</button></div>
-      <p class="note">After saving, commit the changes in <code>public/data/settings.json</code> and push to GitHub to publish.</p>
+      <p class="note">After saving, commit <code>public/data/settings.json</code> and push to GitHub to publish.</p>
     </div>`;
+
+  // Local working copies
+  const work = { stats: stats.map(x=>({...x})), tiers: tiers.map(x=>({...x})) };
+  const bindListInputs = () => {
+    document.querySelectorAll('[data-list]').forEach(inp => inp.oninput = () => {
+      work[inp.dataset.list][+inp.dataset.i][inp.dataset.k] = inp.value;
+    });
+    document.querySelectorAll('[data-remove]').forEach(btn => btn.onclick = () => {
+      work[btn.dataset.remove].splice(+btn.dataset.i, 1); rerenderLists();
+    });
+  };
+  const rerenderLists = () => {
+    $('#stats_list').innerHTML = rowList(work.stats, [['value','e.g. 250+'],['label','e.g. Students Mentored']], 'stats');
+    $('#tiers_list').innerHTML = rowList(work.tiers, [['amount','e.g. ₹500'],['description','e.g. Stationery kit for one student']], 'tiers');
+    bindListInputs();
+  };
+  bindListInputs();
+  $('#add_stat').onclick = () => { work.stats.push({ value:'', label:'' }); rerenderLists(); };
+  $('#add_tier').onclick = () => { work.tiers.push({ amount:'', description:'' }); rerenderLists(); };
+
   $('#ssave').onclick = async () => {
     const body = {
       about: $('#about').value,
@@ -161,6 +201,8 @@ async function renderSettings() {
       contact_address: $('#contact_address').value,
       bank_details: $('#bank_details').value,
       upi_id: $('#upi_id').value,
+      homepage_stats: work.stats.filter(x => (x.value||'').trim() || (x.label||'').trim()),
+      donation_tiers: work.tiers.filter(x => (x.amount||'').trim() || (x.description||'').trim()),
     };
     await api('PUT','/api/settings', body);
     toast("Settings saved");
