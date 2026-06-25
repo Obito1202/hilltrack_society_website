@@ -21,7 +21,7 @@ export default function Achievements() {
               {a.description && <p className="mt-3" style={{ color: "var(--ink-soft)" }}>{a.description}</p>}
               {a.image_url && (
                 <div className="mt-6 aspect-[16/10] overflow-hidden">
-                  <img src={assetUrl(a.image_url)} alt={a.title} className="w-full h-full object-cover" />
+                  <img src={assetUrl(a.image_url)} alt={a.title} className="w-full h-full object-contain" />
                 </div>
               )}
             </article>

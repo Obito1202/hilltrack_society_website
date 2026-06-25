@@ -19,7 +19,7 @@ export default function Schools() {
             <article key={s.id} className="reveal" data-testid={`school-card-${s.id}`}>
               {s.image_url ? (
                 <div className="aspect-[4/3] overflow-hidden">
-                  <img src={assetUrl(s.image_url)} alt={s.name} className="w-full h-full object-cover" />
+                  <img src={assetUrl(s.image_url)} alt={s.name} className="w-full h-full object-contain" />
                 </div>
               ) : <div className="aspect-[4/3]" style={{ background: "var(--surface)" }} />}
               <h3 className="font-serif-display text-2xl mt-5" style={{ color: "var(--ink)" }}>{s.name}</h3>

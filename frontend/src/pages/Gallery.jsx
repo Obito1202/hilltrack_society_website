@@ -17,7 +17,7 @@ export default function Gallery() {
           {items.map((g) => (
             <figure key={g.id} className="reveal group" data-testid={`gallery-item-${g.id}`}>
               <div className="aspect-square overflow-hidden">
-                <img src={assetUrl(g.image_url)} alt={g.caption || "Gallery"} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <img src={assetUrl(g.image_url)} alt={g.caption || "Gallery"} className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" />
               </div>
               {g.caption && <figcaption className="mt-2 text-xs" style={{ color: "var(--ink-soft)" }}>{g.caption}</figcaption>}
             </figure>

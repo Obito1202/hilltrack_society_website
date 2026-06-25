@@ -22,7 +22,7 @@ export default function Home() {
     <div>
       {/* Hero */}
       <section className="relative" data-testid="home-hero">
-        <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, rgba(28,51,37,0.35), rgba(28,51,37,0.55)), url(${HERO_IMG}) center/cover` }} />
+        <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, rgba(28,51,37,0.35), rgba(28,51,37,0.55)), url(${HERO_IMG}) center/contain` }} />
         <Container className="relative py-32 lg:py-48">
           <div className="max-w-3xl text-[#F9F6F0]">
             <div className="overline" style={{ color: "#E8B79A" }}>Registered NGO · Nainital, Uttarakhand</div>
@@ -68,7 +68,7 @@ export default function Home() {
           <div className="mt-16 grid lg:grid-cols-12 gap-8 lg:gap-12">
             <article className="lg:col-span-7 reveal">
               <div className="aspect-[16/10] overflow-hidden">
-                <img src={EDU_IMG} alt="Education impact" className="w-full h-full object-cover" />
+                <img src={EDU_IMG} alt="Education impact" className="w-full h-full object-contain" />
               </div>
               <div className="mt-6 flex items-start gap-4">
                 <BookOpen size={20} style={{ color: "var(--accent)" }} className="mt-1" />
@@ -80,7 +80,7 @@ export default function Home() {
             </article>
             <article className="lg:col-span-5 reveal">
               <div className="aspect-[4/5] overflow-hidden">
-                <img src={ENERGY_IMG} alt="Solar energy in rural India" className="w-full h-full object-cover" />
+                <img src={ENERGY_IMG} alt="Solar energy in rural India" className="w-full h-full object-contain" />
               </div>
               <div className="mt-6 flex items-start gap-4">
                 <Sun size={20} style={{ color: "var(--accent)" }} className="mt-1" />

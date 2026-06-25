@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <div>
       <section className="relative" data-testid="home-hero">
-        <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, rgba(28,51,37,.35), rgba(28,51,37,.55)), url(${HERO}) center/cover` }} />
+        <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, rgba(28,51,37,.35), rgba(28,51,37,.55)), url(${HERO}) center/contain` }} />
         <Container className="relative py-32 lg:py-48">
           <div className="max-w-3xl" style={{ color: "#F9F6F0" }}>
             <div className="overline" style={{ color: "#E8B79A" }}>Registered NGO · Nainital, Uttarakhand</div>

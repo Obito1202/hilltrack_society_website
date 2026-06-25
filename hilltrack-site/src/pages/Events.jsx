@@ -13,7 +13,7 @@ export default function Events() {
           {items.map(e => (
             <article key={e.id} className="grid lg:grid-cols-12 gap-8 p-8" style={{ background: "var(--bg)" }}>
               <div className="lg:col-span-4">
-                {e.image_url ? <div className="aspect-[4/3] overflow-hidden"><img src={assetUrl(e.image_url)} alt={e.title} className="w-full h-full object-cover" /></div> : <div className="aspect-[4/3]" style={{ background: "var(--surface)" }} />}
+                {e.image_url ? <div className="aspect-[4/3] overflow-hidden"><img src={assetUrl(e.image_url)} alt={e.title} className="w-full h-full object-contain" /></div> : <div className="aspect-[4/3]" style={{ background: "var(--surface)" }} />}
               </div>
               <div className="lg:col-span-8">
                 <div className="flex flex-wrap gap-6 text-sm" style={{ color: "var(--ink-soft)" }}>

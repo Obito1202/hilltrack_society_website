@@ -12,7 +12,7 @@ export default function Gallery() {
         <div className="mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
           {items.map(g => (
             <figure key={g.id} className="group">
-              <div className="aspect-square overflow-hidden"><img src={assetUrl(g.image_url)} alt={g.caption||"Gallery"} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" /></div>
+              <div className="aspect-square overflow-hidden"><img src={assetUrl(g.image_url)} alt={g.caption||"Gallery"} className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" /></div>
               {g.caption && <figcaption className="mt-2 text-xs" style={{ color: "var(--ink-soft)" }}>{g.caption}</figcaption>}
             </figure>
           ))}

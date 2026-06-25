@@ -20,7 +20,7 @@ export default function Events() {
               <div className="lg:col-span-4">
                 {e.image_url ? (
                   <div className="aspect-[4/3] overflow-hidden">
-                    <img src={assetUrl(e.image_url)} alt={e.title} className="w-full h-full object-cover" />
+                    <img src={assetUrl(e.image_url)} alt={e.title} className="w-full h-full object-contain" />
                   </div>
                 ) : <div className="aspect-[4/3]" style={{ background: "var(--surface)" }} />}
               </div>

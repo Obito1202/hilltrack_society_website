@@ -12,7 +12,7 @@ export default function Schools() {
         <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {items.map(s => (
             <article key={s.id}>
-              {s.image_url ? <div className="aspect-[4/3] overflow-hidden"><img src={assetUrl(s.image_url)} alt={s.name} className="w-full h-full object-cover" /></div> : <div className="aspect-[4/3]" style={{ background: "var(--surface)" }} />}
+              {s.image_url ? <div className="aspect-[4/3] overflow-hidden"><img src={assetUrl(s.image_url)} alt={s.name} className="w-full h-full object-contain" /></div> : <div className="aspect-[4/3]" style={{ background: "var(--surface)" }} />}
               <h3 className="font-serif-display text-2xl mt-5">{s.name}</h3>
               <div className="mt-2 flex flex-wrap gap-4 text-xs" style={{ color: "var(--ink-soft)" }}>
                 <span>{s.location}</span>{s.visit_date && <span>· {s.visit_date}</span>}
