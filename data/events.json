@@ -1,1 +1,45 @@
-[{"id":"058f5d5a-dd87-40af-81e5-bc1a2360717b","title":"ABC","date":"2026-06-16","location":"Pune","description":"","image_url":"/api/uploads/951550fd67934fd1bb1e12e96c2f811a.jpeg","created_at":"2026-06-21T13:52:03.510728+00:00"},{"id":"ba8070ba-6b2c-4b60-8763-9e2d4b302410","title":"UI QA Event","date":"2026-03-15","location":"","description":"","image_url":"","created_at":"2026-06-21T13:40:06.590018+00:00"},{"id":"18350e98-3287-4cac-9204-fd7a719a71c8","title":"Test Event QA","date":"2026-02-01","location":"Nainital","description":"Tested by QA","image_url":"","created_at":"2026-06-21T13:39:30.132031+00:00"}]
+[
+  {
+    "id": "058f5d5a-dd87-40af-81e5-bc1a2360717b",
+    "title": "ABC",
+    "date": "2026-06-16",
+    "location": "Pune",
+    "description": "",
+    "image_url": "/api/uploads/951550fd67934fd1bb1e12e96c2f811a.jpeg",
+    "created_at": "2026-06-21T13:52:03.510728+00:00"
+  },
+  {
+    "id": "ba8070ba-6b2c-4b60-8763-9e2d4b302410",
+    "title": "UI QA Event",
+    "date": "2026-03-15",
+    "location": "",
+    "description": "",
+    "image_url": "",
+    "created_at": "2026-06-21T13:40:06.590018+00:00"
+  },
+  {
+    "id": "18350e98-3287-4cac-9204-fd7a719a71c8",
+    "title": "Test Event QA",
+    "date": "2026-02-01",
+    "location": "Nainital",
+    "description": "Tested by QA",
+    "image_url": "",
+    "created_at": "2026-06-21T13:39:30.132031+00:00"
+  },
+  {
+    "id": "77b4e1ac-2463-45c3-beb3-67e1df59ebf8",
+    "created_at": "2026-06-21T17:18:39.819Z",
+    "title": "Motivational Sesstion",
+    "location": "Birla Vidya Mandir, Nainital",
+    "image_url": "uploads/5b2e020af294db7c.png",
+    "date": "2026-01-21"
+  },
+  {
+    "id": "7e28d457-49a0-4b8b-92be-234494287f63",
+    "created_at": "2026-06-21T17:21:15.429Z",
+    "title": "Motivational Session",
+    "date": "2023-06-21",
+    "location": "GGIC, Nainital",
+    "image_url": "uploads/fc041c0102b005ec.png"
+  }
+]
