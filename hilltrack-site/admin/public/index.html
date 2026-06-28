@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Hilltrack Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <style>
   :root { --bg:#F9F6F0; --surface:#F2EFEB; --ink:#1C3325; --soft:#4A564F; --accent:#C86A41; --line:#E3DED8; --err:#B83A3A; }
   *{box-sizing:border-box}
@@ -51,12 +54,183 @@
 const TABS = [
   { k:"members",      label:"Members",      fields:[["name","Name"],["role","Role"],["email","Email"],["description","Description","textarea"],["order","Order","number"],["image_url","Photo","image"]] },
   { k:"events",       label:"Events",       fields:[["title","Title"],["date","Date","date"],["location","Location"],["description","Description","textarea"],["image_url","Image","image"]] },
+  { k:"initiatives",  label:"Initiatives",  fields:[["title","Title"],["date","Date","date"],["location","Location"],["description","Description","textarea"],["image_url","Image","image"]] },
   { k:"achievements", label:"Achievements", fields:[["title","Title"],["year","Year"],["description","Description","textarea"],["image_url","Image","image"]] },
   { k:"schools",      label:"Schools",      fields:[["name","School name"],["location","Location"],["visit_date","Visit date","date"],["description","Description","textarea"],["image_url","Image","image"]] },
   { k:"gallery",      label:"Gallery",      fields:[["caption","Caption"],["image_url","Image","image"]] },
   { k:"settings",     label:"Site Settings" },
+  { k:"books",        label:"📚 Books" },
 ];
 let current = "members", editing = null, form = {};
+
+// ── Firebase state for Books tab ─────────────────────────────────────────────
+let fbApp = null, fbAuth = null, fbDb = null;
+
+async function ensureFirebase() {
+  if (fbApp) return true;
+  try {
+    const cfg = await fetch('/api/firebase-config').then(r => r.json());
+    if (!cfg || !cfg.projectId || cfg.apiKey === 'REPLACE_WITH_YOUR_API_KEY') return false;
+    fbApp  = firebase.initializeApp(cfg);
+    fbAuth = firebase.auth();
+    fbDb   = firebase.firestore();
+    return true;
+  } catch { return false; }
+}
+
+const BOOK_CLASSES = Array.from({length:12}, (_,i) => `class${i+1}`);
+const cn = id => id.replace('class','Class ');
+
+async function renderBooks() {
+  const ok = await ensureFirebase();
+  if (!ok) {
+    $('#content').innerHTML = `
+      <h2>Book Exchange</h2>
+      <div class="form" style="max-width:640px">
+        <p style="margin-bottom:4px">Firebase is not configured yet. Open <code>src/lib/firebase.js</code> and replace the placeholder values with your Firebase project credentials, then restart the admin server.</p>
+        <p style="font-size:12px;color:var(--soft);margin-top:8px">Need help? Follow the setup instructions at the top of <code>src/lib/firebase.js</code>.</p>
+      </div>`;
+    return;
+  }
+
+  const user = fbAuth.currentUser;
+  if (!user) {
+    $('#content').innerHTML = `
+      <h2>Book Exchange</h2>
+      <p style="color:var(--soft);margin-bottom:16px">Sign in with your Google account to manage books and requests.</p>
+      <button class="btn" id="fb-signin">Sign in with Google</button>`;
+    $('#fb-signin').onclick = () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      fbAuth.signInWithPopup(provider).then(() => renderBooks()).catch(e => alert(e.message));
+    };
+    return;
+  }
+
+  // Fetch data
+  const [booksSnap, reqsSnap] = await Promise.all([
+    fbDb.collection('books').get(),
+    fbDb.collection('bookRequests').where('status','==','pending').orderBy('createdAt','asc').get().catch(() =>
+      fbDb.collection('bookRequests').where('status','==','pending').get()
+    ),
+  ]);
+
+  const booksData = {};
+  booksSnap.forEach(d => { booksData[d.id] = d.data(); });
+  const requests = reqsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  $('#content').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h2 style="margin:0">Book Exchange</h2>
+      <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+        <span style="color:var(--soft)">${user.email}</span>
+        <button class="btn ghost" id="fb-signout">Sign out</button>
+        <button class="btn" id="fb-refresh">↻ Refresh</button>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;margin:28px 0 12px">Inventory — adjust current stock</h3>
+    <p style="font-size:12px;color:var(--soft);margin:-4px 0 12px">
+      <strong>Current</strong> = books physically on hand. <strong>Available</strong> = current minus pending requests.
+      Use + / − to update stock after receiving or handing out books.
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:32px">
+      ${BOOK_CLASSES.map(id => {
+        const b = booksData[id] || {current:0, requested:0};
+        const avail = Math.max(0, (b.current||0) - (b.requested||0));
+        return `
+          <div style="border:1px solid var(--line);padding:12px;text-align:center;background:#fff">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--soft)">${cn(id)}</div>
+            <div style="font-size:28px;font-weight:600;color:var(--ink);line-height:1.2;margin:6px 0">${avail}</div>
+            <div style="font-size:11px;color:var(--soft)">avail (${b.current||0}−${b.requested||0})</div>
+            <div style="display:flex;gap:4px;justify-content:center;margin-top:10px">
+              <button class="btn danger" data-adj="${id}" data-delta="-1" style="padding:4px 12px;font-size:16px;line-height:1">−</button>
+              <button class="btn" data-adj="${id}" data-delta="1" style="padding:4px 12px;font-size:16px;line-height:1">+</button>
+            </div>
+          </div>`;
+      }).join('')}
+    </div>
+
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;margin:0 0 12px">Pending Requests (${requests.length})</h3>
+    ${requests.length ? requests.map(r => `
+      <div class="row">
+        <div>
+          <div class="title">${r.studentName || r.studentEmail}</div>
+          <div class="meta">
+            Giving ${cn(r.giveClass||'')} → Wants ${cn(r.wantClass||'')}
+            &nbsp;·&nbsp; ${r.studentEmail}
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn" data-fulfill="${r.id}" data-want="${r.wantClass}">✓ Fulfill</button>
+          <button class="btn danger" data-cancel="${r.id}" data-want="${r.wantClass}">✕ Cancel</button>
+        </div>
+      </div>`).join('') : '<p style="color:var(--soft);font-size:14px">No pending requests.</p>'}`;
+
+  $('#fb-signout').onclick = () => fbAuth.signOut().then(() => renderBooks());
+  $('#fb-refresh').onclick = () => renderBooks();
+
+  document.querySelectorAll('[data-adj]').forEach(btn => {
+    btn.onclick = async () => {
+      const classId = btn.dataset.adj;
+      const delta   = parseInt(btn.dataset.delta);
+      const ref     = fbDb.collection('books').doc(classId);
+      try {
+        await fbDb.runTransaction(async tx => {
+          const snap = await tx.get(ref);
+          const cur  = snap.exists ? (snap.data().current || 0) : 0;
+          const req  = snap.exists ? (snap.data().requested || 0) : 0;
+          if (snap.exists) tx.update(ref, { current: Math.max(0, cur + delta) });
+          else tx.set(ref, { current: Math.max(0, delta), requested: 0 });
+        });
+        toast(delta > 0 ? 'Added 1 set' : 'Removed 1 set');
+        renderBooks();
+      } catch(e) { alert(e.message); }
+    };
+  });
+
+  document.querySelectorAll('[data-fulfill]').forEach(btn => {
+    btn.onclick = async () => {
+      if (!confirm('Mark this request as fulfilled? This will decrement current stock by 1.')) return;
+      const reqId    = btn.dataset.fulfill;
+      const wantCls  = btn.dataset.want;
+      try {
+        await fbDb.runTransaction(async tx => {
+          const bookRef  = fbDb.collection('books').doc(wantCls);
+          const reqRef   = fbDb.collection('bookRequests').doc(reqId);
+          const bookSnap = await tx.get(bookRef);
+          const b        = bookSnap.exists ? bookSnap.data() : {current:0, requested:0};
+          tx.update(bookRef, {
+            current:   Math.max(0, (b.current||0) - 1),
+            requested: Math.max(0, (b.requested||0) - 1),
+          });
+          tx.update(reqRef, { status:'fulfilled', fulfilledAt: firebase.firestore.FieldValue.serverTimestamp() });
+        });
+        toast('Request fulfilled');
+        renderBooks();
+      } catch(e) { alert(e.message); }
+    };
+  });
+
+  document.querySelectorAll('[data-cancel]').forEach(btn => {
+    btn.onclick = async () => {
+      if (!confirm('Cancel this request? The student will need to request again.')) return;
+      const reqId   = btn.dataset.cancel;
+      const wantCls = btn.dataset.want;
+      try {
+        await fbDb.runTransaction(async tx => {
+          const bookRef  = fbDb.collection('books').doc(wantCls);
+          const reqRef   = fbDb.collection('bookRequests').doc(reqId);
+          const bookSnap = await tx.get(bookRef);
+          const b        = bookSnap.exists ? bookSnap.data() : {current:0, requested:0};
+          tx.update(bookRef, { requested: Math.max(0, (b.requested||0) - 1) });
+          tx.update(reqRef, { status:'cancelled', cancelledAt: firebase.firestore.FieldValue.serverTimestamp() });
+        });
+        toast('Request cancelled');
+        renderBooks();
+      } catch(e) { alert(e.message); }
+    };
+  });
+}
 
 const $ = (s) => document.querySelector(s);
 const toast = (m) => { const t=$('#toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); };
@@ -70,6 +244,7 @@ function renderNav() {
 async function render() {
   renderNav();
   if (current === "settings") return renderSettings();
+  if (current === "books")    return renderBooks();
   const tab = TABS.find(t => t.k===current);
   const items = await api('GET',`/api/${current}`);
   const formHtml = editing ? renderForm(tab) : '';

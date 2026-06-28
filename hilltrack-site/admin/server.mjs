@@ -32,7 +32,7 @@ async function writeJSON(name, value) {
   await fs.writeFile(path.join(DATA_DIR, `${name}.json`), JSON.stringify(value, null, 2));
 }
 
-const COLLECTIONS = ["members", "events", "achievements", "schools", "gallery"];
+const COLLECTIONS = ["members", "events", "initiatives", "achievements", "schools", "gallery"];
 
 const app = express();
 app.use(express.json({ limit: "2mb" }));
@@ -89,6 +89,20 @@ const upload = multer({ storage, limits: { fileSize: 8 * 1024 * 1024 } });
 app.post("/api/upload", upload.single("file"), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "no file" });
   res.json({ url: `uploads/${req.file.filename}` });
+});
+
+// --- Firebase config (read-only, for admin panel to bootstrap Firebase) ---
+app.get("/api/firebase-config", async (_, res) => {
+  try {
+    const src = await fs.readFile(path.join(ROOT, "src", "lib", "firebase.js"), "utf8");
+    const match = src.match(/const firebaseConfig\s*=\s*(\{[\s\S]*?\});/);
+    if (!match) return res.json(null);
+    // eslint-disable-next-line no-eval
+    const cfg = eval(`(${match[1]})`);
+    res.json(cfg);
+  } catch {
+    res.json(null);
+  }
 });
 
 const PORT = process.env.PORT || 5174;

@@ -12,6 +12,8 @@ import Schools from "./pages/Schools.jsx";
 import Gallery from "./pages/Gallery.jsx";
 import Contact from "./pages/Contact.jsx";
 import Donate from "./pages/Donate.jsx";
+import Initiatives from "./pages/Initiatives.jsx";
+import Books from "./pages/Books.jsx";
 
 // HashRouter so GitHub Pages doesn't 404 on direct sub-routes
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -22,11 +24,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/about" element={<About />} />
         <Route path="/members" element={<Members />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/initiatives" element={<Initiatives />} />
         <Route path="/achievements" element={<Achievements />} />
         <Route path="/schools" element={<Schools />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/donate" element={<Donate />} />
+        <Route path="/books" element={<Books />} />
       </Route>
     </Routes>
   </HashRouter>
